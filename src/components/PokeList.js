@@ -3,31 +3,40 @@ import PokemonCard from './PokemonCard';
 import Loader from './Loader';
  import  Container  from 'react-bootstrap/Container';
  import Row from 'react-bootstrap/Row';
+ import Button from 'react-bootstrap/Button';
 
 import axios from 'axios';
 
 
 import '../App.css'
 
-const PokeList=()=> {
-const [pokemons, setPokemons]=useState('Wow I am state');
+const PokeList=({favHandler,favourites})=> {
+const [pokemons, setPokemons]=useState([]);
 const [isLoading,setIsLoading]=useState(true);
-// const [nextList,setNextList]=useState();
+ const [nextPokemons,setnextPokemons]=useState( "https://pokeapi.co/api/v2/pokemon?limit=50&offset=0");
 
 useEffect(() => {
-  axios.get("https://pokeapi.co/api/v2/pokemon/").then((res) => {
-    // console.log(res.data);
-    // setNextList(res.data.next);
-  const fetches = res.data.results.map((p) =>
-  axios.get(p.url).then((res) => res.data)
-  );
-  Promise.all(fetches).then((data) => {
-  setPokemons(data);
-  setIsLoading(false);
-  });
-  // console.log(pokemons);
-  });
-  }, []);
+    getPokemons();
+  },[]); // if we dont put [], getPokemons() method will be rendered multiple time. With [] bracket it calls it only once
+
+const getPokemons = ()=> {
+    axios.get(nextPokemons).catch(error=>{
+        console.log(error);
+    }).then((res) => {
+    
+      const fetches = res.data.results.map((p) =>
+      axios.get(p.url).then((res) => res.data)
+      );
+      setnextPokemons(res.data.next);
+
+      Promise.all(fetches).then((data) => {
+      setPokemons((prevState)=>[...prevState, ...data]);
+      setIsLoading(false);
+      });
+     
+      });
+}
+
 console.log('pokemon after state changed',pokemons)
   return (
     
@@ -46,10 +55,14 @@ console.log('pokemon after state changed',pokemons)
           key={pokemon.name}
           name={pokemon.name}
           image={pokemon.sprites.other.dream_world.front_default}
+          pokemonName={pokemon.name}
+          fav={favourites.some(item=> item.name === pokemon.name)}
+          favClick={()=>favHandler(pokemon)}
           />
         ))}
 </Row>
 </Container>
+<Button variant="primary" size="lg" onClick={getPokemons}> See more</Button>
 </div>
     
   )

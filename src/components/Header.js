@@ -1,18 +1,34 @@
 import React from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import  Container  from 'react-bootstrap/Container';
+import { Link } from "react-router-dom";
+
+
 
 const Header = () => {
     return (
-      <div>
-        <Navbar variant="dark" className="add_padding">
+        <Navbar bg="dark" variant="dark" expand="lg">
           <Container>
-            <Navbar.Brand href="#">PokeApp</Navbar.Brand>
-            
+            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto" >
+                <LinkContainer to="/">
+                  <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="pokelist">
+                  <Nav.Link>Pokelist</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="favourites">
+                  <Nav.Link>Favourites</Nav.Link>
+                </LinkContainer>
+              </Nav>
+            </Navbar.Collapse>
           </Container>
         </Navbar>
-      </div>
-    );
+      );
 };
 
 export default Header;
