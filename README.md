@@ -5,3 +5,6 @@
 
 # Favourites
 ![Favourites](./public/Favourites.png)
+## use `https://pokeapi.co/` to get data
+## Only function components (useState, useEffect)
+## React-Bootstrap

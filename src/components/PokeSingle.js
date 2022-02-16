@@ -32,7 +32,9 @@ const PokeSingle = () => {
             <p>Height:{pokemonDetails.height * 10} cm</p>
             <p>Weight:{pokemonDetails.weight/10} kg</p>
             <div>
+              <strong>
               Types:
+              </strong>
               <ul>
                 {pokemonDetails.types.map((item) => (
                   <li key={item.type.name}>{item.type.name}</li>
