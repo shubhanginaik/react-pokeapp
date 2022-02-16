@@ -1,51 +1,84 @@
 import React,{useState,useEffect} from 'react';
-
-import Loader from './Loader'
 import { useParams,useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-
 
 import axios from 'axios';
 
-const PokeSingle = () => {
-    let {pokemonName} =useParams();
-    let navigate=useNavigate();
-    const [pokemonDetails, setpokemonDetails] = useState();
-    const [isLoading,setIsLoading]=useState(true);
-    useEffect(()=>{
-       axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`).catch(error=>{
-        console.log(error);
-       }).then((res)=>{
-           setpokemonDetails(res.data);
-           setIsLoading(false);
-       });
-    },[]);
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
-    return (
-      <div className="align-middle">
-        {isLoading && <Loader />}
-        {!isLoading && (
-          <div>
-             
-            <h2>{pokemonDetails.name}</h2>
-            <img src={pokemonDetails.sprites.other.home.front_default} />
-            <p>Height:{pokemonDetails.height * 10} cm</p>
-            <p>Weight:{pokemonDetails.weight/10} kg</p>
-            <div>
-              <strong>
-              Types:
-              </strong>
+import Loader from "./Loader";
+
+const PokeSingle = () => {
+  let { pokemonName } = useParams();
+  let navigate = useNavigate();
+
+  const [pokemon, setPokemon] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+      .catch((error) => {
+        console.log(error);
+      })
+      .then((res) => {
+        setPokemon(res.data);
+        setIsLoading(false);
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <div>
+      {isLoading && <Loader />}
+      {!isLoading && (
+        <Container >
+          <Row>
+            <Col className="mb-5 ">
+              <h2 className="text-center text-capitalize">{pokemon.name}</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <img
+              width="300px"
+              height="240px"
+                className="align-self-end full"
+                src={pokemon.sprites.other.dream_world.front_default}
+                alt={pokemon.name}
+              />
+            </Col>
+            <Col>
+              <p>
+                <strong>Height:</strong> {pokemon.height * 10} cm
+              </p>
+              <p>
+                <strong>Weight:</strong> {pokemon.weight / 10} kg
+              </p>
+              <strong>Type:</strong>
               <ul>
-                {pokemonDetails.types.map((item) => (
+                {pokemon.types.map((item) => (
                   <li key={item.type.name}>{item.type.name}</li>
                 ))}
               </ul>
-            </div>
-          </div>
-        )}
-        <Button variant="outline-primary" size="sm" onClick={()=> navigate(-1)}>Back to list</Button>
-      </div>
-    );
+              <p>
+                <strong>Abilities:</strong>
+              </p>
+              <ul>
+                {pokemon.abilities.map((item) => (
+                  <li key={item.ability.name}>{item.ability.name}</li>
+                ))}
+              </ul>
+              <Button variant="secondary" onClick={() => navigate(-1)}>
+                Back to list
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      )}
+    </div>
+  );
 };
 
 export default PokeSingle;

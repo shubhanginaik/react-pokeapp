@@ -21,6 +21,7 @@ const favList = ({favHandler,favourites}) => {
                 pokemonName={pokemon.name}
                 fav={favourites.some((item) => item.name === pokemon.name)}
                 favClick={() => favHandler(pokemon)}
+                type={pokemon.types[0].type.name}
               />
             ))}
           </Row>
